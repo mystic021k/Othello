@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OthelloClass</class>
+ <widget class="QMainWindow" name="OthelloClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>344</width>
+    <height>400</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>黑白棋</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QOthelloView" name="graphicsView">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>264</width>
+      <height>264</height>
+     </rect>
+    </property>
+    <property name="verticalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+    <property name="horizontalScrollBarPolicy">
+     <enum>Qt::ScrollBarAlwaysOff</enum>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <property name="movable">
+    <bool>false</bool>
+   </property>
+   <property name="floatable">
+    <bool>false</bool>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="action_black"/>
+   <addaction name="action_white"/>
+   <addaction name="action_duel"/>
+   <addaction name="action_pass"/>
+   <addaction name="separator"/>
+   <addaction name="action_help"/>
+   <addaction name="action_about"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="action_black">
+   <property name="icon">
+    <iconset resource="othello.qrc">
+     <normaloff>:/icon/png/black.png</normaloff>:/icon/png/black.png</iconset>
+   </property>
+   <property name="text">
+    <string>走黑棋</string>
+   </property>
+  </action>
+  <action name="action_white">
+   <property name="icon">
+    <iconset resource="othello.qrc">
+     <normaloff>:/icon/png/white.png</normaloff>:/icon/png/white.png</iconset>
+   </property>
+   <property name="text">
+    <string>走白棋</string>
+   </property>
+  </action>
+  <action name="action_duel">
+   <property name="icon">
+    <iconset resource="othello.qrc">
+     <normaloff>:/icon/png/duel.png</normaloff>:/icon/png/duel.png</iconset>
+   </property>
+   <property name="text">
+    <string>对战</string>
+   </property>
+  </action>
+  <action name="action_help">
+   <property name="icon">
+    <iconset resource="othello.qrc">
+     <normaloff>:/icon/png/help.png</normaloff>:/icon/png/help.png</iconset>
+   </property>
+   <property name="text">
+    <string>帮助</string>
+   </property>
+  </action>
+  <action name="action_about">
+   <property name="icon">
+    <iconset resource="othello.qrc">
+     <normaloff>:/icon/png/about.png</normaloff>:/icon/png/about.png</iconset>
+   </property>
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
+  <action name="action_pass">
+   <property name="icon">
+    <iconset resource="othello.qrc">
+     <normaloff>:/icon/png/pass.png</normaloff>:/icon/png/pass.png</iconset>
+   </property>
+   <property name="text">
+    <string>跳过</string>
+   </property>
+   <property name="toolTip">
+    <string>跳过</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>QOthelloView</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">qothelloview.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="othello.qrc"/>
+ </resources>
+ <connections/>
+</ui>
