@@ -27,8 +27,8 @@ public slots:
     void playerTakeWhite();
     void playerToPlayer();
     void passPlayer();
-    void ShowAbout();
-    void ShowHelp();
+    void showAbout();
+    void showHelp();
 private:
     Ui::OthelloClass ui;
     OthelloEngine* engine;

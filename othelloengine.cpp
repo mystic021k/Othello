@@ -1,5 +1,4 @@
 #include "othelloengine.h"
-
 #include <QList>
 
 OthelloEngine::OthelloEngine()
@@ -21,11 +20,11 @@ void OthelloEngine::newGame()
     board[3][3] = 2;
     black_count = 2;
     white_count = 2;
+    calcBlackWhiteValues();
 }
 
 bool OthelloEngine::blackTurn(int x, int y)
 {
-    calcBlackValues();
     if(black_values[y][x] <= 0)
     {
         return false;
@@ -63,6 +62,7 @@ bool OthelloEngine::blackTurn(int x, int y)
         board[y][x] = 1;
         black_count += replacePoints.size() + 1;
         white_count -= replacePoints.size();
+        calcBlackWhiteValues();
         return true;
     }
     else
@@ -73,7 +73,6 @@ bool OthelloEngine::blackTurn(int x, int y)
 
 bool OthelloEngine::whiteTurn(int x, int y)
 {
-    calcWhiteValues();
     if(white_values[y][x] <= 0)
     {
         return false;
@@ -111,6 +110,7 @@ bool OthelloEngine::whiteTurn(int x, int y)
         board[y][x] = 2;
         white_count += replacePoints.size() + 1;
         black_count -= replacePoints.size();
+        calcBlackWhiteValues();
         return true;
     }
     else
@@ -147,86 +147,6 @@ int OthelloEngine::checkResult()
     return CONTINUE;
 }
 
-void OthelloEngine::calcBlackValues()
-{
-    for(int y = 0;y < 8;y++)
-    {
-        for(int x = 0;x < 8;x++)
-        {
-            if(board[y][x] != 0)
-            {
-                black_values[y][x] = 0;
-                continue;
-            }
-            int value_count = 0;
-            for(int i = 0;i < 8;i++)
-            {
-                int d_value_count = 0;
-                int px = x + directions[i].x(), py = y + directions[i].y();
-                while(px >= 0 && px < 8 && py >= 0 && py < 8)
-                {
-                    if(board[py][px] == 0)
-                    {
-                        break;
-                    }
-                    if(board[py][px] == 1)
-                    {
-                        value_count += d_value_count;
-                        break;
-                    }
-                    if(board[py][px] == 2)
-                    {
-                        d_value_count++;
-                    }
-                    px = px + directions[i].x();
-                    py = py + directions[i].y();
-                }
-            }
-            black_values[y][x] = value_count;
-        }
-    }
-}
-
-void OthelloEngine::calcWhiteValues()
-{
-    for(int y = 0;y < 8;y++)
-    {
-        for(int x = 0;x < 8;x++)
-        {
-            if(board[y][x] != 0)
-            {
-                white_values[y][x] = 0;
-                continue;
-            }
-            int value_count = 0;
-            for(int i = 0;i < 8;i++)
-            {
-                int d_value_count = 0;
-                int px = x + directions[i].x(), py = y + directions[i].y();
-                while(px >= 0 && px < 8 && py >= 0 && py < 8)
-                {
-                    if(board[py][px] == 0)
-                    {
-                        break;
-                    }
-                    if(board[py][px] == 2)
-                    {
-                        value_count += d_value_count;
-                        break;
-                    }
-                    if(board[py][px] == 1)
-                    {
-                        d_value_count++;
-                    }
-                    px = px + directions[i].x();
-                    py = py + directions[i].y();
-                }
-            }
-            white_values[y][x] = value_count;
-        }
-    }
-}
-
 int OthelloEngine::getBoardNum(int x, int y)
 {
     return board[y][x];
@@ -250,4 +170,70 @@ int OthelloEngine::getBlackCount()
 int OthelloEngine::getWhiteCount()
 {
     return white_count;
+}
+
+void OthelloEngine::calcBlackWhiteValues()
+{
+    for (int y = 0; y < 8; y++)
+    {
+        for (int x = 0; x < 8; x++)
+        {
+            if (board[y][x] != 0)
+            {
+                black_values[y][x] = 0;
+                white_values[y][x] = 0;
+                continue;
+            }
+            int b_value_count = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                int d_value_count = 0;
+                int px = x + directions[i].x(), py = y + directions[i].y();
+                while (px >= 0 && px < 8 && py >= 0 && py < 8)
+                {
+                    if (board[py][px] == 0)
+                    {
+                        break;
+                    }
+                    if (board[py][px] == 1)
+                    {
+                        b_value_count += d_value_count;
+                        break;
+                    }
+                    if (board[py][px] == 2)
+                    {
+                        d_value_count++;
+                    }
+                    px = px + directions[i].x();
+                    py = py + directions[i].y();
+                }
+            }
+            black_values[y][x] = b_value_count;
+            int w_value_count = 0;
+            for (int i = 0; i < 8; i++)
+            {
+                int d_value_count = 0;
+                int px = x + directions[i].x(), py = y + directions[i].y();
+                while (px >= 0 && px < 8 && py >= 0 && py < 8)
+                {
+                    if (board[py][px] == 0)
+                    {
+                        break;
+                    }
+                    if (board[py][px] == 2)
+                    {
+                        w_value_count += d_value_count;
+                        break;
+                    }
+                    if (board[py][px] == 1)
+                    {
+                        d_value_count++;
+                    }
+                    px = px + directions[i].x();
+                    py = py + directions[i].y();
+                }
+            }
+            white_values[y][x] = w_value_count;
+        }
+    }
 }

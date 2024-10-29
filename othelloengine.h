@@ -13,14 +13,13 @@ public:
     bool blackTurn(int x, int y);
     bool whiteTurn(int x, int y);
     int checkResult();
-    void calcBlackValues();
-    void calcWhiteValues();
     int getBoardNum(int x, int y);
     int getBlackValue(int x, int y);
     int getWhiteValue(int x, int y);
     int getBlackCount();
     int getWhiteCount();
 private:
+    void calcBlackWhiteValues();
     const QPoint directions[8] = {QPoint(1, 0), QPoint(1, 1), QPoint(0, 1), QPoint(-1, 1), QPoint(-1, 0), QPoint(-1, -1), QPoint(0, -1), QPoint(1, -1)};
     int board[8][8];
     int black_values[8][8];

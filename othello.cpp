@@ -1,9 +1,7 @@
 #include "othello.h"
-
 #include "othelloai.h"
-
+#include "qgamehelpdlg.h"
 #include <QMessageBox>
-#include <qgamehelpdlg.h>
 
 Othello::Othello(QWidget *parent)
     : QMainWindow(parent)
@@ -14,11 +12,9 @@ Othello::Othello(QWidget *parent)
     connect(ui.action_white, SIGNAL(triggered()), this, SLOT(playerTakeWhite()));
     connect(ui.action_duel, SIGNAL(triggered()), this, SLOT(playerToPlayer()));
     connect(ui.action_pass, SIGNAL(triggered()), this, SLOT(passPlayer()));
-    connect(ui.action_about, SIGNAL(triggered()), this, SLOT(ShowAbout()));
-    connect(ui.action_help, SIGNAL(triggered()), this, SLOT(ShowHelp()));
+    connect(ui.action_about, SIGNAL(triggered()), this, SLOT(showAbout()));
+    connect(ui.action_help, SIGNAL(triggered()), this, SLOT(showHelp()));
     timer = new QTimer(this);
-    timer->start(0);
-    timer->setInterval(1000);
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimer()));
     playerTakeBlack();
 }
@@ -97,20 +93,21 @@ void Othello::checkResult()
     msgBox.setWindowTitle(QString::fromUtf8("黑白棋"));
     if(gameResult == engine->TIE)
     {
-        msgBox.setText(QString::fromUtf8("不分胜负　"));
+        msgBox.setText(QString::fromUtf8("　不分胜负　　　"));
         ui.statusBar->showMessage(QString::fromUtf8("不分胜负"));
     }
     if(gameResult == engine->BLACK_WIN)
     {
-        msgBox.setText(QString::fromUtf8("黑棋胜利　"));
+        msgBox.setText(QString::fromUtf8("　黑棋胜利　　　"));
         ui.statusBar->showMessage(QString::fromUtf8("黑棋胜利"));
     }
     if(gameResult == engine->WHITE_WIN)
     {
-        msgBox.setText(QString::fromUtf8("白棋胜利　"));
+        msgBox.setText(QString::fromUtf8("　白棋胜利　　　"));
         ui.statusBar->showMessage(QString::fromUtf8("白棋胜利"));
     }
     isFinished = true;
+    timer->stop();
     msgBox.exec();
     changeButtonState(true);
 }
@@ -159,6 +156,8 @@ void Othello::startGame()
     isFinished = false;
     paintBoard();
     setStatusMsg();
+    timer->start(0);
+    timer->setInterval(1000);
 }
 
 void Othello::nextTurn()
@@ -251,12 +250,12 @@ void Othello::passPlayer()
     }
 }
 
-void Othello::ShowAbout()
+void Othello::showAbout()
 {
-    QMessageBox::about(this, QString(), "Version 1.0.0\r\n2024.10.29");
+    QMessageBox::about(this, QString(), "Version 1.0.1\r\n2024.10.29");
 }
 
-void Othello::ShowHelp()
+void Othello::showHelp()
 {
     QGameHelpDlg dlg;
     dlg.exec();

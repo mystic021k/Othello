@@ -11,7 +11,6 @@ OthelloAI::OthelloAI(OthelloEngine* oengine)
 
 bool OthelloAI::doBlackTurn()
 {
-    engine->calcBlackValues();
     int max_value = 0;
     int dx = -1, dy = -1;
     for(int y = 0;y < 8;y++)
@@ -38,7 +37,6 @@ bool OthelloAI::doBlackTurn()
 
 bool OthelloAI::doWhiteTurn()
 {
-    engine->calcWhiteValues();
     int max_value = 0;
     int dx = -1, dy = -1;
     for(int y = 0;y < 8;y++)

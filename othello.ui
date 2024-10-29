@@ -10,6 +10,12 @@
     <height>400</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>110</width>
+    <height>160</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>黑白棋</string>
   </property>
@@ -116,7 +122,7 @@
   <customwidget>
    <class>QOthelloView</class>
    <extends>QGraphicsView</extends>
-   <header location="global">qothelloview.h</header>
+   <header>qothelloview.h</header>
   </customwidget>
  </customwidgets>
  <resources>
