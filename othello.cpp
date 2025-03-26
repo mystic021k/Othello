@@ -69,10 +69,10 @@ void Othello::paintBoard()
                 {
                     QPen piecePen;
                     piecePen.setStyle(Qt::NoPen);
-                    QRadialGradient radialGrad(QPointF(centerPos.x() - chessRadius / 12, centerPos.y() - chessRadius / 12), chessRadius);
-                    radialGrad.setColorAt(0, Qt::white);
-                    radialGrad.setColorAt(0.8, Qt::white);
-                    radialGrad.setColorAt(1, Qt::lightGray);
+                    QRadialGradient radialGrad(QPointF(centerPos.x(), centerPos.y()), chessRadius);
+                    radialGrad.setColorAt(0.4, QColor(255, 255, 255));
+                    radialGrad.setColorAt(0.7, QColor(240, 240, 240));
+                    radialGrad.setColorAt(1, QColor(192, 192, 192));
                     QBrush pieceBrush(radialGrad);
                     scene->addEllipse(centerPos.x() - chessRadius, centerPos.y() - chessRadius, chessRadius * 2, chessRadius * 2, piecePen, pieceBrush);
                 }
@@ -252,7 +252,7 @@ void Othello::passPlayer()
 
 void Othello::showAbout()
 {
-    QMessageBox::about(this, QString(), "Version 1.0.1\r\n2024.10.29");
+    QMessageBox::about(this, QString(), "Version 1.0.2\r\n2025.03.26");
 }
 
 void Othello::showHelp()
