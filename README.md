@@ -1,2 +1,2 @@
 # Othello
-A Reversi/Othello game based on Qt.
+A reversi/othello game based on Qt.
