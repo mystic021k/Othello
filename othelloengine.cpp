@@ -7,17 +7,20 @@ OthelloEngine::OthelloEngine()
 
 void OthelloEngine::newGame()
 {
-    for(int y = 0;y < 8;y++)
+    board = QList<QList<int>>();
+    for(int y = 0;y < board_size;y++)
     {
-        for(int x = 0;x < 8;x++)
+        QList<int> line = QList<int>();
+        for(int x = 0;x < board_size;x++)
         {
-            board[y][x] = 0;
+            line.append(0);
         }
+        board.append(line);
     }
-    board[3][4] = 1;
-    board[4][3] = 1;
-    board[4][4] = 2;
-    board[3][3] = 2;
+    board[board_size / 2 - 1][board_size / 2] = 1;
+    board[board_size / 2][board_size / 2 - 1] = 1;
+    board[board_size / 2][board_size / 2] = 2;
+    board[board_size / 2 - 1][board_size / 2 - 1] = 2;
     black_count = 2;
     white_count = 2;
     calcBlackWhiteValues();
@@ -34,7 +37,7 @@ bool OthelloEngine::blackTurn(int x, int y)
     {
         QList<QPoint> dReplacePoints;
         int px = x + directions[i].x(), py = y + directions[i].y();
-        while(px >= 0 && px < 8 && py >= 0 && py < 8)
+        while(px >= 0 && px < board_size && py >= 0 && py < board_size)
         {
             if(board[py][px] == 0)
             {
@@ -82,7 +85,7 @@ bool OthelloEngine::whiteTurn(int x, int y)
     {
         QList<QPoint> dReplacePoints;
         int px = x + directions[i].x(), py = y + directions[i].y();
-        while(px >= 0 && px < 8 && py >= 0 && py < 8)
+        while(px >= 0 && px < board_size && py >= 0 && py < board_size)
         {
             if(board[py][px] == 0)
             {
@@ -121,15 +124,7 @@ bool OthelloEngine::whiteTurn(int x, int y)
 
 int OthelloEngine::checkResult()
 {
-    if(white_count <= 0)
-    {
-        return BLACK_WIN;
-    }
-    if(black_count <= 0)
-    {
-        return WHITE_WIN;
-    }
-    if(black_count + white_count == 64)
+    if(getBlackMoves().size() <= 0 && getWhiteMoves().size() <= 0)
     {
         if(black_count > white_count)
         {
@@ -145,11 +140,6 @@ int OthelloEngine::checkResult()
         }
     }
     return CONTINUE;
-}
-
-int OthelloEngine::getBoardNum(int x, int y)
-{
-    return board[y][x];
 }
 
 int OthelloEngine::getBlackValue(int x, int y)
@@ -172,16 +162,62 @@ int OthelloEngine::getWhiteCount()
     return white_count;
 }
 
+int OthelloEngine::getBoardSize()
+{
+    return board_size;
+}
+
+QList<QList<int>> OthelloEngine::getBoardData()
+{
+    return board;
+}
+
+QList<QPoint> OthelloEngine::getBlackMoves()
+{
+    QList<QPoint> moves = QList<QPoint>();
+    for (int y = 0; y < board_size; y++)
+    {
+        for (int x = 0; x < board_size; x++)
+        {
+            if (black_values[y][x] > 0)
+            {
+                moves.append(QPoint(x, y));
+            }
+        }
+    }
+    return moves;
+}
+
+QList<QPoint> OthelloEngine::getWhiteMoves()
+{
+    QList<QPoint> moves = QList<QPoint>();
+    for (int y = 0; y < board_size; y++)
+    {
+        for (int x = 0; x < board_size; x++)
+        {
+            if (white_values[y][x] > 0)
+            {
+                moves.append(QPoint(x, y));
+            }
+        }
+    }
+    return moves;
+}
+
 void OthelloEngine::calcBlackWhiteValues()
 {
-    for (int y = 0; y < 8; y++)
+    black_values = QList<QList<int>>();
+    white_values = QList<QList<int>>();
+    for (int y = 0; y < board_size; y++)
     {
-        for (int x = 0; x < 8; x++)
+        QList<int> black_line = QList<int>();
+        QList<int> white_line = QList<int>();
+        for (int x = 0; x < board_size; x++)
         {
             if (board[y][x] != 0)
             {
-                black_values[y][x] = 0;
-                white_values[y][x] = 0;
+                black_line.append(0);
+                white_line.append(0);
                 continue;
             }
             int b_value_count = 0;
@@ -189,7 +225,7 @@ void OthelloEngine::calcBlackWhiteValues()
             {
                 int d_value_count = 0;
                 int px = x + directions[i].x(), py = y + directions[i].y();
-                while (px >= 0 && px < 8 && py >= 0 && py < 8)
+                while (px >= 0 && px < board_size && py >= 0 && py < board_size)
                 {
                     if (board[py][px] == 0)
                     {
@@ -208,13 +244,13 @@ void OthelloEngine::calcBlackWhiteValues()
                     py = py + directions[i].y();
                 }
             }
-            black_values[y][x] = b_value_count;
+            black_line.append(b_value_count);
             int w_value_count = 0;
             for (int i = 0; i < 8; i++)
             {
                 int d_value_count = 0;
                 int px = x + directions[i].x(), py = y + directions[i].y();
-                while (px >= 0 && px < 8 && py >= 0 && py < 8)
+                while (px >= 0 && px < board_size && py >= 0 && py < board_size)
                 {
                     if (board[py][px] == 0)
                     {
@@ -233,7 +269,9 @@ void OthelloEngine::calcBlackWhiteValues()
                     py = py + directions[i].y();
                 }
             }
-            white_values[y][x] = w_value_count;
+            white_line.append(w_value_count);
         }
+        black_values.append(black_line);
+        white_values.append(white_line);
     }
 }

@@ -28,10 +28,10 @@ void Othello::paintBoard()
     {
         int minLength = this->width() <= this->height() - 56 ? this->width() : this->height() - 56;
         minLength -= 24;
-        int pieceRoughSize = (minLength - minLength % 80) / 8;
+        int pieceRoughSize = (minLength - minLength % (engine->getBoardSize() * 10)) / engine->getBoardSize();
         pieceSize = pieceRoughSize - pieceRoughSize % 10;
-        leftStart = (this->width() - pieceSize * 8) / 2;
-        topStart = (this->height() - 56 - pieceSize * 8) / 2;
+        leftStart = (this->width() - pieceSize * engine->getBoardSize()) / 2;
+        topStart = (this->height() - 56 - pieceSize * engine->getBoardSize()) / 2;
         QGraphicsScene* scene = new QGraphicsScene(this);
         QPen backPen;
         backPen.setColor(Qt::black);
@@ -40,22 +40,22 @@ void Othello::paintBoard()
         QBrush backBrush;
         backBrush.setColor(Qt::darkGreen);
         backBrush.setStyle(Qt::SolidPattern);
-        scene->addRect(leftStart - 6, topStart - 6, pieceSize * 8 + 12, pieceSize * 8 + 12, backPen, backBrush);
-        for (int s = 0; s <= 8; s++)
+        scene->addRect(leftStart - 6, topStart - 6, pieceSize * engine->getBoardSize() + 12, pieceSize * engine->getBoardSize() + 12, backPen, backBrush);
+        for (int s = 0; s <= engine->getBoardSize(); s++)
         {
             QPen linePen;
             linePen.setColor(Qt::black);
             linePen.setStyle(Qt::SolidLine);
-            scene->addLine(leftStart, topStart + s * pieceSize, leftStart + 8 * pieceSize, topStart + s * pieceSize, linePen);
-            scene->addLine(leftStart + s * pieceSize, topStart, leftStart + s * pieceSize, topStart + 8 * pieceSize, linePen);
+            scene->addLine(leftStart, topStart + s * pieceSize, leftStart + engine->getBoardSize() * pieceSize, topStart + s * pieceSize, linePen);
+            scene->addLine(leftStart + s * pieceSize, topStart, leftStart + s * pieceSize, topStart + engine->getBoardSize() * pieceSize, linePen);
         }
-        for (int y = 0; y < 8; y++)
+        for (int y = 0; y < engine->getBoardSize(); y++)
         {
-            for (int x = 0; x < 8; x++)
+            for (int x = 0; x < engine->getBoardSize(); x++)
             {
                 QPoint centerPos = QPoint(leftStart + x * pieceSize + pieceSize / 2, topStart + y * pieceSize + pieceSize / 2);
                 int chessRadius = pieceSize * 0.4;
-                if (engine->getBoardNum(x, y) == 1)
+                if (engine->getBoardData()[y][x] == 1)
                 {
                     QPen piecePen;
                     piecePen.setStyle(Qt::NoPen);
@@ -65,7 +65,7 @@ void Othello::paintBoard()
                     QBrush pieceBrush(radialGrad);
                     scene->addEllipse(centerPos.x() - chessRadius, centerPos.y() - chessRadius, chessRadius * 2, chessRadius * 2, piecePen, pieceBrush);
                 }
-                if (engine->getBoardNum(x, y) == 2)
+                if (engine->getBoardData()[y][x] == 2)
                 {
                     QPen piecePen;
                     piecePen.setStyle(Qt::NoPen);
@@ -252,7 +252,7 @@ void Othello::passPlayer()
 
 void Othello::showAbout()
 {
-    QMessageBox::about(this, QString(), "Version 1.0.2\r\n2025.03.26");
+    QMessageBox::about(this, QString(), "Version 1.2.0\r\n2025.03.28");
 }
 
 void Othello::showHelp()
