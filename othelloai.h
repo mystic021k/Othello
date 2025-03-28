@@ -10,9 +10,7 @@ public:
     bool doWhiteTurn();
 private:
     OthelloEngine* engine;
-    const int max_round = 5;
-    const int PLAYER_BLACK = 1;
-    const int PLAYER_WHITE = 2;
+    const int max_round = 7;
     const QPoint directions[8] = { QPoint(1, 0), QPoint(1, 1), QPoint(0, 1), QPoint(-1, 1), QPoint(-1, 0), QPoint(-1, -1), QPoint(0, -1), QPoint(1, -1) };
     int alphabetaBlackNode(QList<QList<int>> tmpboard, int alpha, int beta, int level = 1, int limit = INT_MAX);
     int alphabetaWhiteNode(QList<QList<int>> tmpboard, int alpha, int beta, int level = 1, int limit = INT_MAX);

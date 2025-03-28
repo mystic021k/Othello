@@ -12,7 +12,7 @@ OthelloAI::OthelloAI(OthelloEngine* oengine)
 bool OthelloAI::doBlackTurn()
 {
     QList<QList<int>> boardData = engine->getBoardData();
-    QList<QPoint> moves = testMoves(boardData, PLAYER_BLACK);
+    QList<QPoint> moves = testMoves(boardData, 1);
     if (moves.size() <= 0)
     {
         return false;
@@ -21,7 +21,7 @@ bool OthelloAI::doBlackTurn()
     int val = INT_MIN;
     for (int m = 0; m < moves.size(); m++)
     {
-        int m_val = alphabetaBlackNode(testPlayMoveBoard(boardData, PLAYER_BLACK, moves[m].x(), moves[m].y()), INT_MIN, INT_MAX, 2, max_round);
+        int m_val = alphabetaWhiteNode(testPlayMoveBoard(boardData, 1, moves[m].x(), moves[m].y()), INT_MIN, INT_MAX, 2, max_round);
         if (m_val > val)
         {
             pos = m;
@@ -34,7 +34,7 @@ bool OthelloAI::doBlackTurn()
 bool OthelloAI::doWhiteTurn()
 {
     QList<QList<int>> boardData = engine->getBoardData();
-    QList<QPoint> moves = testMoves(boardData, PLAYER_WHITE);
+    QList<QPoint> moves = testMoves(boardData, 2);
     if (moves.size() <= 0)
     {
         return false;
@@ -43,7 +43,7 @@ bool OthelloAI::doWhiteTurn()
     int val = INT_MAX;
     for (int m = 0; m < moves.size(); m++)
     {
-        int m_val = alphabetaWhiteNode(testPlayMoveBoard(boardData, PLAYER_WHITE, moves[m].x(), moves[m].y()), INT_MIN, INT_MAX, 2, max_round);
+        int m_val = alphabetaBlackNode(testPlayMoveBoard(boardData, 2, moves[m].x(), moves[m].y()), INT_MIN, INT_MAX, 2, max_round);
         if (m_val < val)
         {
             pos = m;
@@ -56,7 +56,7 @@ bool OthelloAI::doWhiteTurn()
 
 int OthelloAI::alphabetaBlackNode(QList<QList<int>> tmpboard, int alpha, int beta, int level, int limit)
 {
-    QList<QPoint> tmp_moves = testMoves(tmpboard, PLAYER_BLACK);
+    QList<QPoint> tmp_moves = testMoves(tmpboard, 1);
     if (tmp_moves.size() <= 0)
     {
         return testCompute(tmpboard);
@@ -64,7 +64,7 @@ int OthelloAI::alphabetaBlackNode(QList<QList<int>> tmpboard, int alpha, int bet
     QList<int> tmp_utilities = QList<int>();
     for (int m = 0; m < tmp_moves.size(); m++)
     {
-        tmp_utilities.append(testCompute(testPlayMoveBoard(tmpboard, PLAYER_BLACK, tmp_moves[m].x(), tmp_moves[m].y())));
+        tmp_utilities.append(testCompute(testPlayMoveBoard(tmpboard, 1, tmp_moves[m].x(), tmp_moves[m].y())));
     }
     QList<QPoint> moves = QList<QPoint>();
     while (tmp_moves.size() > 0)
@@ -89,7 +89,7 @@ int OthelloAI::alphabetaBlackNode(QList<QList<int>> tmpboard, int alpha, int bet
         QPoint m_move = moves[mm];
         if (level < limit)
         {
-            int next_value = alphabetaWhiteNode(testPlayMoveBoard(tmpboard, PLAYER_BLACK, m_move.x(), m_move.y()), alpha, beta, level + 1, limit);
+            int next_value = alphabetaWhiteNode(testPlayMoveBoard(tmpboard, 1, m_move.x(), m_move.y()), alpha, beta, level + 1, limit);
             if (next_value > compile_value)
             {
                 compile_value = next_value;
@@ -117,7 +117,7 @@ int OthelloAI::alphabetaBlackNode(QList<QList<int>> tmpboard, int alpha, int bet
 
 int OthelloAI::alphabetaWhiteNode(QList<QList<int>> tmpboard, int alpha, int beta, int level, int limit)
 {
-    QList<QPoint> tmp_moves = testMoves(tmpboard, PLAYER_WHITE);
+    QList<QPoint> tmp_moves = testMoves(tmpboard, 2);
     if (tmp_moves.size() <= 0)
     {
         return testCompute(tmpboard);
@@ -125,7 +125,7 @@ int OthelloAI::alphabetaWhiteNode(QList<QList<int>> tmpboard, int alpha, int bet
     QList<int> tmp_utilities = QList<int>();
     for (int m = 0; m < tmp_moves.size(); m++)
     {
-        tmp_utilities.append(testCompute(testPlayMoveBoard(tmpboard, PLAYER_WHITE, tmp_moves[m].x(), tmp_moves[m].y())));
+        tmp_utilities.append(testCompute(testPlayMoveBoard(tmpboard, 2, tmp_moves[m].x(), tmp_moves[m].y())));
     }
     QList<QPoint> moves = QList<QPoint>();
     while (tmp_moves.size() > 0)
@@ -150,7 +150,7 @@ int OthelloAI::alphabetaWhiteNode(QList<QList<int>> tmpboard, int alpha, int bet
         QPoint m_move = moves[mm];
         if (level < limit)
         {
-            int next_value = alphabetaBlackNode(testPlayMoveBoard(tmpboard, PLAYER_WHITE, m_move.x(), m_move.y()), alpha, beta, level + 1, limit);
+            int next_value = alphabetaBlackNode(testPlayMoveBoard(tmpboard, 2, m_move.x(), m_move.y()), alpha, beta, level + 1, limit);
             if (next_value < compile_value)
             {
                 compile_value = next_value;
@@ -199,12 +199,12 @@ QList<QPoint> OthelloAI::testMoves(QList<QList<int>> tmpboard, int color)
                     {
                         break;
                     }
-                    if (tmpboard[py][px] == PLAYER_BLACK)
+                    if (tmpboard[py][px] == 1)
                     {
                         b_value_count += d_value_count;
                         break;
                     }
-                    if (tmpboard[py][px] == PLAYER_WHITE)
+                    if (tmpboard[py][px] == 2)
                     {
                         d_value_count++;
                     }
@@ -227,12 +227,12 @@ QList<QPoint> OthelloAI::testMoves(QList<QList<int>> tmpboard, int color)
                     {
                         break;
                     }
-                    if (tmpboard[py][px] == PLAYER_WHITE)
+                    if (tmpboard[py][px] == 2)
                     {
                         w_value_count += d_value_count;
                         break;
                     }
-                    if (tmpboard[py][px] == PLAYER_BLACK)
+                    if (tmpboard[py][px] == 1)
                     {
                         d_value_count++;
                     }
@@ -246,11 +246,11 @@ QList<QPoint> OthelloAI::testMoves(QList<QList<int>> tmpboard, int color)
             }
         }
     }
-    if (color == PLAYER_BLACK)
+    if (color == 1)
     {
         return test_black_moves;
     }
-    if (color == PLAYER_WHITE)
+    if (color == 2)
     {
         return test_white_moves;
     }
@@ -260,7 +260,7 @@ QList<QPoint> OthelloAI::testMoves(QList<QList<int>> tmpboard, int color)
 QList<QList<int>> OthelloAI::testPlayMoveBoard(QList<QList<int>> tmpboard, int color, int x, int y)
 {
     QList<QPoint> replacePoints;
-    if (color == PLAYER_BLACK)
+    if (color == 1)
     {
         for (int i = 0; i < 8; i++)
         {
@@ -272,12 +272,12 @@ QList<QList<int>> OthelloAI::testPlayMoveBoard(QList<QList<int>> tmpboard, int c
                 {
                     break;
                 }
-                if (tmpboard[py][px] == PLAYER_BLACK)
+                if (tmpboard[py][px] == 1)
                 {
                     replacePoints.append(dReplacePoints);
                     break;
                 }
-                if (tmpboard[py][px] == PLAYER_WHITE)
+                if (tmpboard[py][px] == 2)
                 {
                     dReplacePoints.append(QPoint(px, py));
                 }
@@ -289,12 +289,12 @@ QList<QList<int>> OthelloAI::testPlayMoveBoard(QList<QList<int>> tmpboard, int c
         {
             for (int p = 0; p < replacePoints.size(); p++)
             {
-                tmpboard[replacePoints.value(p).y()][replacePoints.value(p).x()] = PLAYER_BLACK;
+                tmpboard[replacePoints.value(p).y()][replacePoints.value(p).x()] = 1;
             }
-            tmpboard[y][x] = PLAYER_BLACK;
+            tmpboard[y][x] = 1;
         }
     }
-    if (color == PLAYER_WHITE)
+    if (color == 2)
     {
         for (int i = 0; i < 8; i++)
         {
@@ -306,12 +306,12 @@ QList<QList<int>> OthelloAI::testPlayMoveBoard(QList<QList<int>> tmpboard, int c
                 {
                     break;
                 }
-                if (tmpboard[py][px] == PLAYER_WHITE)
+                if (tmpboard[py][px] == 2)
                 {
                     replacePoints.append(dReplacePoints);
                     break;
                 }
-                if (tmpboard[py][px] == PLAYER_BLACK)
+                if (tmpboard[py][px] == 1)
                 {
                     dReplacePoints.append(QPoint(px, py));
                 }
@@ -323,9 +323,9 @@ QList<QList<int>> OthelloAI::testPlayMoveBoard(QList<QList<int>> tmpboard, int c
         {
             for (int p = 0; p < replacePoints.size(); p++)
             {
-                tmpboard[replacePoints.value(p).y()][replacePoints.value(p).x()] = PLAYER_WHITE;
+                tmpboard[replacePoints.value(p).y()][replacePoints.value(p).x()] = 2;
             }
-            tmpboard[y][x] = PLAYER_WHITE;
+            tmpboard[y][x] = 2;
         }
     }
     return tmpboard;
@@ -338,11 +338,11 @@ int OthelloAI::testCompute(QList<QList<int>> tmpboard)
     {
         for (int x = 0; x < engine->getBoardSize(); x++)
         {
-            if (tmpboard[y][x] == PLAYER_BLACK)
+            if (tmpboard[y][x] == 1)
             {
                 size += 1;
             }
-            else if (tmpboard[y][x] == PLAYER_WHITE)
+            else if (tmpboard[y][x] == 2)
             {
                 size -= 1;
             }

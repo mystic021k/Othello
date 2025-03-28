@@ -252,7 +252,7 @@ void Othello::passPlayer()
 
 void Othello::showAbout()
 {
-    QMessageBox::about(this, QString(), "Version 1.2.0\r\n2025.03.28");
+    QMessageBox::about(this, QString(), "Version 1.2.1\r\n2025.03.28");
 }
 
 void Othello::showHelp()
